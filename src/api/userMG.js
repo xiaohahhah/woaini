@@ -4,9 +4,9 @@ import { loginreq, req } from './axiosFun';
 // 登录接口
 export const login = (params) => { return loginreq("post", "/api/user/login", params) };
 // 获取用户菜单
-export const menu = (params) => { return axios.get("/api/menu?&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
+export const menu = (params) => { return axios.get("/api/user/menusList" ).then(res => res.data) };
 // 退出接口
-export const loginout = () => { return axios.delete("/api/login?&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
+export const loginout = () => { return axios.delete("/api/user/login?&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
 
 /**
  * 用户管理
@@ -63,10 +63,11 @@ export const RoleRightTree = (params) => { return axios.get("/api/RoleRight/tree
 export const RoleRightSave = (params) => { return req("post", "/api/RoleRight/save", params) };
 
 /**
- * 公司管理
+ * 日记管理
  **/
-// 公司管理-获取公司列表
-export const deptList = (params) => { return req("post", "/api/Dept/list", params) };
+// 日记管理-获取日记列表
+export const diaryList = (params) => {
+  return req("post", "/api/diary/diaryList", params) };
 // 公司管理-保存（添加编辑）
 export const deptSave = (params) => { return req("post", "/api/Dept/save", params) };
 // 公司管理-删除公司

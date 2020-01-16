@@ -16,7 +16,7 @@
   </el-container> -->
 
   <el-container class="index-con">
-    <el-aside :class="showclass">
+    <el-aside :class="showclass" style="background-color: #600000">
       <leftnav></leftnav>
     </el-aside>
     <el-container class="main-con">

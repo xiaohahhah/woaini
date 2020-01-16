@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style> 
+<style>
 html,
 body {
     width: 100%;
@@ -18,6 +18,7 @@ body {
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
+
 }
 #app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;

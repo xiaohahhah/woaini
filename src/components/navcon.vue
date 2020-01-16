@@ -1,8 +1,8 @@
 /**
 * 头部菜单
-*/ 
+*/
 <template>
-  <el-menu class="el-menu-demo" mode="horizontal" background-color="#334157" text-color="#fff" active-text-color="#fff">
+  <el-menu class="el-menu-demo" mode="horizontal"  background-color="#600000" text-color="#fff" active-text-color="#ffd04b">
     <el-button class="buttonimg">
       <img class="showimg" :src="collapsed?imgsq:imgshow" @click="toggle(collapsed)">
     </el-button>

@@ -52,7 +52,7 @@ module.exports = {
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
         assetsPublicPath: './',
-        iconPaths: '../static/title.ico',
+        iconPaths: '../title.ico',
         /**
          * Source Maps
          */
