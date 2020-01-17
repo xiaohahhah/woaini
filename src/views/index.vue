@@ -82,7 +82,12 @@ export default {
   height: 100%;
   background-color: #334157;
   margin: 0px;
+
 }
+.aside .logobox{
+  display: none;
+}
+
 .asideshow {
   width: 240px !important;
   height: 100%;

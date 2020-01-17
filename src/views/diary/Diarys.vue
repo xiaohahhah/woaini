@@ -53,34 +53,20 @@
     <!-- 分页组件 -->
     <Pagination v-bind:child-msg="pageparm" @callFather="callFather"></Pagination>
     <!-- 编辑 或者添加 界面 -->
-    <el-dialog :title="title" :visible.sync="editFormVisible" width="70%"  align="center" @click="closeDialog">
+    <el-dialog :title="title" :visible.sync="editFormVisible" width="70%"  @click="closeDialog">
       <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm">
         <el-form-item label="日记名称" prop="deptName">
           <el-input size="small" v-model="editForm.deptName" auto-complete="off" placeholder="日记名称"></el-input>
         </el-form-item>
-        <el-form-item label="日记内容" prop="deptNo">
-          <el-input size="small" v-model="editForm.deptNo" auto-complete="off" placeholder="日记内容"></el-input>
+        <el-form-item label="日记内容" prop="content">
+          <wangEnduit v-model="detail"  :isClear="isClear" @change="change"> ww</wangEnduit>
+          <!--<editor  v-model="editForm.info" :catchData="catchData"  placeholder="日记内容"></editor>-->
         </el-form-item>
         <el-select v-model="formInline.onPublic" size="small" placeholder="请选择公开状态">
           <el-option label="全部" value=" "></el-option>
           <el-option label="公开" value="1"></el-option>
           <el-option label="私密" value="0"></el-option>
         </el-select>
-        <el-form-item label="部门代码" prop="deptNo">
-          <el-input size="small" v-model="editForm.deptNo" auto-complete="off" placeholder="请输入部门代码"></el-input>
-        </el-form-item>
-        <el-form-item label="部门名称" prop="deptName">
-          <el-input size="small" v-model="editForm.deptName" auto-complete="off" placeholder="请输入部门名称"></el-input>
-        </el-form-item>
-        <el-form-item label="部门代码" prop="deptNo">
-          <el-input size="small" v-model="editForm.deptNo" auto-complete="off" placeholder="请输入部门代码"></el-input>
-        </el-form-item>
-        <el-form-item label="部门名称" prop="deptName">
-          <el-input size="small" v-model="editForm.deptName" auto-complete="off" placeholder="请输入部门名称"></el-input>
-        </el-form-item>
-        <el-form-item label="部门代码" prop="deptNo">
-          <el-input size="small" v-model="editForm.deptNo" auto-complete="off" placeholder="请输入部门代码"></el-input>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="closeDialog">取消</el-button>
@@ -91,8 +77,9 @@
 </template>
 
 <script>
-import { diaryList, diaryEdit, diaryDelete } from '../../api/userMG'
+import { diaryList, diarySave, diaryDelete } from '../../api/userMG'
 import Pagination from '../../components/Pagination'
+import wangEnduit from '../../components/wangEnduit'
 export default {
   data() {
     return {
@@ -114,6 +101,8 @@ export default {
         wxImgUrl: ''
         // token: localStorage.getItem('logintoken')
       },
+      isClear: false,
+      detail:"",
 
       formInline: {
         pageNo: 1,
@@ -135,12 +124,17 @@ export default {
         pageNo: '',
         pageSize: 10,
         total: ''
-      }
+      },
+      enduit: {
+        isClear: false,
+        content:""
+    }
     }
   },
   // 注册组件
   components: {
-    Pagination
+    Pagination,
+    wangEnduit
   },
   /**
    * 数据发生改变
@@ -214,7 +208,7 @@ export default {
     submitForm(editData) {
       this.$refs[editData].validate(valid => {
         if (valid) {
-          deptSave(this.editForm)
+          diarySave(this.editForm)
             .then(res => {
               this.editFormVisible = false
               this.loading = false
@@ -240,6 +234,11 @@ export default {
           return false
         }
       })
+    },
+    //富文本框
+    change(val) {
+      console.log(val)
+
     },
     // 删除公司
     deleteUser(index, row) {
