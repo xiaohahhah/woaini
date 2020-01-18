@@ -68,9 +68,11 @@ export const RoleRightSave = (params) => { return req("post", "/api/RoleRight/sa
 // 日记管理-获取日记列表
 export const diaryList = (params) => {
   return req("post", "/api/diary/diaryList", params) };
-// 公司管理-保存（添加编辑）
+// 日记管理-保存（添加编辑）
 export const diarySave = (params) => { return req("post", "/api/diary/save", params) };
-// 公司管理-删除公司
+//日记管理--编辑
+export const diaryEdit = (params) => { return req("post", "/api/diary/updateDiary", params) };
+// 日记管理-删除日记
 export const deptDelete = (params) => { return axios.get("/api/Dept/delete?ids=" + params + "&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
 
 /**

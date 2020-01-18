@@ -10,6 +10,8 @@ import index from '@/views/index';
  */
 // 日记管理
 import Dirays from '@/views/diary/Diarys';
+import DiaryEditOrAdd from '@/views/diary/DiaryEditOrAdd';
+import DiarysDetail from '@/views/diary/DiarysDetail';
 // 机器信息管理
 import Machine from '@/views/machine/Machine';
 // 货道信息管理
@@ -84,16 +86,16 @@ export default new Router({
                 requireAuth: true
             }
         },  {
-            path: '/machine/MachineConfig',
+            path: '/diray/DiarysDetail',
             name: '日记详情',
-            component: MachineConfig,
+            component: DiarysDetail,
             meta: {
                 requireAuth: true
             }
         }, {
-            path: '/pay/Config',
-            name: '支付配置',
-            component: Config,
+            path: '/diray/DiaryEditOrAdd',
+            name: '新增日记',
+            component: DiaryEditOrAdd,
             meta: {
                 requireAuth: true
             }

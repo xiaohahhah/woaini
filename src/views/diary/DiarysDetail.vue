@@ -4,7 +4,7 @@
 
 <script>
   export default {
-    name: 'DiarysDetail.vye'
+    name: 'DiarysDetail'
   }
 </script>
 

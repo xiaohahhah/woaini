@@ -53,20 +53,26 @@
     <!-- 分页组件 -->
     <Pagination v-bind:child-msg="pageparm" @callFather="callFather"></Pagination>
     <!-- 编辑 或者添加 界面 -->
-    <el-dialog :title="title" :visible.sync="editFormVisible" width="70%"  @click="closeDialog">
-      <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm">
-        <el-form-item label="日记名称" prop="deptName">
-          <el-input size="small" v-model="editForm.deptName" auto-complete="off" placeholder="日记名称"></el-input>
+    <el-dialog :title="title" :visible.sync="editFormVisible" width="80%"  @click="closeDialog">
+      <el-form label-width="120px" :model="editForm"  ref="editForm">
+        <el-form-item label="日记名称" prop="diaryName">
+          <el-input size="small" v-model="editForm.diaryName"  placeholder="日记名称"></el-input>
         </el-form-item>
         <el-form-item label="日记内容" prop="content">
-          <wangEnduit v-model="detail"  :isClear="isClear" @change="change"> ww</wangEnduit>
-          <!--<editor  v-model="editForm.info" :catchData="catchData"  placeholder="日记内容"></editor>-->
+          <wangEnduit v-model="editForm.content"  :isClear="isClear" @change="change"> ww</wangEnduit>
         </el-form-item>
-        <el-select v-model="formInline.onPublic" size="small" placeholder="请选择公开状态">
-          <el-option label="全部" value=" "></el-option>
-          <el-option label="公开" value="1"></el-option>
-          <el-option label="私密" value="0"></el-option>
-        </el-select>
+        <el-form-item label="是否公开" >
+          <el-select v-model="formInline.onPublic" size="small" placeholder="请选择公开状态">
+            <el-option label="全部" value=" "></el-option>
+            <el-option label="公开" value="1"></el-option>
+            <el-option label="私密" value="0"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="标签名称" >
+          <el-checkbox-group v-model="editForm.tagName"   :min="0"  :max="8">
+            <el-checkbox v-for="tag in tagNames" :key="tag" :label="tag">{{tag}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="closeDialog">取消</el-button>
@@ -77,7 +83,7 @@
 </template>
 
 <script>
-import { diaryList, diarySave, diaryDelete } from '../../api/userMG'
+import { diaryList, diarySave, diaryEdit } from '../../api/userMG'
 import Pagination from '../../components/Pagination'
 import wangEnduit from '../../components/wangEnduit'
 export default {
@@ -88,6 +94,7 @@ export default {
       loading: false, //是显示加载
       editFormVisible: false, //控制编辑页面显示与隐藏
       title: '添加',
+      tagNames: [],
       editForm: {
         userId: '',
         userName: '',
@@ -151,7 +158,7 @@ export default {
    * 里面的方法只有被调用才会执行
    */
   methods: {
-    // 获取公司列表
+    // 获取日记列表
     getdata(parameter) {
       this.loading = true
       console.log(parameter)
@@ -192,48 +199,78 @@ export default {
     //显示编辑界面
     handleEdit: function(index, row) {
       this.editFormVisible = true
-      if (row != undefined && row != 'undefined') {
-        this.title = '修改'
-        this.editForm.deptId = row.deptId
-        this.editForm.deptName = row.deptName
-        this.editForm.deptNo = row.deptNo
-      } else {
-        this.title = '添加'
-        this.editForm.deptId = ''
-        this.editForm.deptName = ''
-        this.editForm.deptNo = ''
-      }
+      console.log(111)
+      this.$router.push({ path: '/diary/DiaryEditOrAdd' })
+        .catch(err => {
+          this.editFormVisible = false
+          this.loading = false
+          this.$message.error('日记修改失败，请稍后再试！')
+        })
+      // this.editFormVisible = true
+      // if (row != undefined && row != 'undefined') {
+      //   this.title = '修改'
+      //   this.editForm.diaryName = row.diaryName
+      //   this.editForm.content = row.content
+      //   this.editForm.tagName = row.tagName
+      //   this.editForm.onPublic = row.onPublic
+      // } else {
+      //   this.title = '新增日记'
+      //   this.editForm.diaryName = ''
+      //   this.editForm.content = ''
+      //   this.editForm.onPublic = ''
+      //   this.editForm.tagName = ''
+      // }
     },
     // 编辑、增加页面保存方法
     submitForm(editData) {
-      this.$refs[editData].validate(valid => {
-        if (valid) {
-          diarySave(this.editForm)
-            .then(res => {
-              this.editFormVisible = false
-              this.loading = false
-              if (res.success) {
-                this.getdata(this.formInline)
-                this.$message({
-                  type: 'success',
-                  message: '公司保存成功！'
-                })
-              } else {
-                this.$message({
-                  type: 'info',
-                  message: res.msg
-                })
-              }
+      if (this.title === '新增日记') {
+        console.log(111)
+        diarySave(this.editForm)
+          .then(res => {
+            this.editFormVisible = false
+            this.loading = false
+            if (res.code === 200) {
+              this.getdata(this.formInline)
+              this.$message({
+                type: 'success',
+                message: '日记保存成功！'
+              })
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.message
+              })
+            }
+          })
+          .catch(err => {
+            this.editFormVisible = false
+            this.loading = false
+            this.$message.error('公司保存失败，请稍后再试！')
+          })
+      } else {
+        console.log(222)
+        diaryEdit(this.editForm).then(res => {
+          this.editFormVisible = false
+          this.loading = false
+          if (res.code === 200) {
+            this.getdata(this.formInline)
+            this.$message({
+              type: 'success',
+              message: '日记修改成功！'
             })
-            .catch(err => {
-              this.editFormVisible = false
-              this.loading = false
-              this.$message.error('公司保存失败，请稍后再试！')
+          } else {
+            this.$message({
+              type: 'warning',
+              message: res.message
             })
-        } else {
-          return false
-        }
-      })
+          }
+        })
+          .catch(err => {
+            this.editFormVisible = false
+            this.loading = false
+            this.$message.error('日记修改失败，请稍后再试！')
+          })
+      }
     },
     //富文本框
     change(val) {
